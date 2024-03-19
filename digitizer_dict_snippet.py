@@ -118,10 +118,20 @@ def main():
                 'double_23': 0,
                 'triple': 0
             }
-            # TODO split double counts
-            for k, v in timestamp_group_dict.items():
-                coincidences = len(v)
-                counts[coincidences-1] += 1
+            for timestamp, data_point_list in timestamp_group_dict.items():
+                coincidences = len(data_point_list)
+
+                if coincidences == 1:
+                    counts['single'] += 1
+                elif coincidences == 2:
+                    counts['double'] += 1
+                    # TODO split double counts
+                elif coincidences == 3:
+                    counts['triple'] += 1
+                else:
+                    print("something weird happened: ")
+                    print(data_point_list)
+
                 # print(f'timestamp={k}: {len(v)}')
             print(f"coincidence time={ct} => counts={counts}")
             
