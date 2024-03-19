@@ -113,24 +113,28 @@ def main():
             counts = {
                 'single': 0,
                 'double': 0,
+                'double_01': 0,
                 'double_12': 0,
-                'double_13': 0,
-                'double_23': 0,
+                'double_02': 0,
                 'triple': 0
             }
-            for timestamp, data_point_list in timestamp_group_dict.items():
-                coincidences = len(data_point_list)
+            for timestamp, data_point_set in timestamp_group_dict.items():
+                coincidences = len(data_point_set)
+                data_point_list = list(data_point_set)
 
                 if coincidences == 1:
                     counts['single'] += 1
                 elif coincidences == 2:
                     counts['double'] += 1
-                    # TODO split double counts
+                    first_ch = data_point_list[0].channel_num
+                    second_ch = data_point_list[1].channel_num
+                    double_ch_str = f'{first_ch}{second_ch}' if first_ch < second_ch else f'{second_ch}{first_ch}'
+                    counts[f'double_{double_ch_str}'] += 1
                 elif coincidences == 3:
                     counts['triple'] += 1
                 else:
                     print("something weird happened: ")
-                    print(data_point_list)
+                    print(data_point_set)
 
                 # print(f'timestamp={k}: {len(v)}')
             print(f"coincidence time={ct} => counts={counts}")
